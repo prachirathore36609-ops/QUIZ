@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Game</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #3e2723, #6d4c41);
+        color: #fff;
+        text-align: center;
+    }
+
+    .container {
+        width: 500px;
+        margin: 60px auto;
+        background: #5d4037;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+        color: #ffccbc;
+    }
+
+    .question {
+        font-size: 22px;
+        margin: 20px 0;
+    }
+
+    input {
+        padding: 10px;
+        width: 60%;
+        border-radius: 6px;
+        border: none;
+        margin-top: 10px;
+    }
+
+    button {
+        padding: 10px 15px;
+        background: #8d6e63;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin: 10px;
+    }
+
+    button:hover {
+        background: #a1887f;
+    }
+
+    .info {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .score {
+        font-size: 18px;
+        margin-top: 10px;
+        color: #ffe0b2;
+    }
+
+    .timer {
+        font-size: 16px;
+        color: #ffab91;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🎮 Quick Math Quiz</h1>
+
+    <div class="timer">⏳ Time Left: <span id="time">30</span>s</div>
+
+    <div class="question" id="question">Click Start to Begin</div>
+
+    <input type="number" id="answer" placeholder="Enter your answer">
+    <br>
+
+    <button onclick="startGame()">Start Game</button>
+    <button onclick="checkAnswer()">Submit</button>
+
+    <div class="score">Score: <span id="score">0</span></div>
+    <div class="info" id="feedback"></div>
+</div>
+
+<script>
+    let num1, num2, correctAnswer;
+    let score = 0;
+    let timeLeft = 30;
+    let timer;
+
+    // Generate random question
+    function generateQuestion() {
+        num1 = Math.floor(Math.random() * 20) + 1;
+        num2 = Math.floor(Math.random() * 20) + 1;
+
+        correctAnswer = num1 + num2;
+
+        document.getElementById("question").innerText =
+            num1 + " + " + num2 + " = ?";
+    }
+
+    // Start game
+    function startGame() {
+        score = 0;
+        timeLeft = 30;
+        document.getElementById("score").innerText = score;
+        document.getElementById("time").innerText = timeLeft;
+        document.getElementById("feedback").innerText = "";
+
+        generateQuestion();
+
+        clearInterval(timer);
+        timer = setInterval(function() {
+            timeLeft--;
+            document.getElementById("time").innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById("question").innerText = "Game Over!";
+                document.getElementById("feedback").innerText = "Final Score: " + score;
+            }
+        }, 1000);
+    }
+
+    // Check answer
+    function checkAnswer() {
+        let userAnswer = parseInt(document.getElementById("answer").value);
+
+        if (userAnswer === correctAnswer) {
+            score++;
+            document.getElementById("feedback").innerText = "✅ Correct!";
+        } else {
+            document.getElementById("feedback").innerText = "❌ Wrong!";
+        }
+
+        document.getElementById("score").innerText = score;
+
+        document.getElementById("answer").value = "";
+
+        generateQuestion();
+    }
+</script>
+
+</body>
+</html>
